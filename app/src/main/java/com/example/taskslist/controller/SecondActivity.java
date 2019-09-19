@@ -20,7 +20,7 @@ public class SecondActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.second_container_layout,
-                        SecondFragment.newInstance(getIntent().getStringExtra(USERNAME),
+                        ToDoFragment.newInstance(getIntent().getStringExtra(USERNAME),
                         getIntent().getIntExtra(TASKS_NUMBER,0)))
                 .commit();
     }

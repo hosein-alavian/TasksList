@@ -20,10 +20,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SecondFragment#newInstance} factory method to
+ * Use the {@link ToDoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SecondFragment extends Fragment {
+public class DoingFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String USERNAME = "com.example.taskslist.model.username";
@@ -37,7 +37,7 @@ public class SecondFragment extends Fragment {
     private Adaptor tasksAdapter;
 
 
-    public SecondFragment() {
+    public DoingFragment() {
         // Required empty public constructor
     }
 
@@ -47,11 +47,11 @@ public class SecondFragment extends Fragment {
      *
      * @param username    Parameter 1.
      * @param tasksNumber Parameter 2.
-     * @return A new instance of fragment SecondFragment.
+     * @return A new instance of fragment ToDoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SecondFragment newInstance(String username, int tasksNumber) {
-        SecondFragment fragment = new SecondFragment();
+    public static ToDoFragment newInstance(String username, int tasksNumber) {
+        ToDoFragment fragment = new ToDoFragment();
         Bundle args = new Bundle();
         args.putString(USERNAME, username);
         args.putInt(TASKSNUMBER, tasksNumber);
@@ -72,20 +72,20 @@ public class SecondFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        return inflater.inflate(R.layout.fragment_todo, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.tasks_recycler_view);
+        recyclerView = view.findViewById(R.id.doingtasks_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI();
     }
 
     private void updateUI() {
         List<TasksObjects> tasksList =
-                Repository.getInstance(username, tasksNumber).getUserTasksList();
+                Repository.getInstance(username, tasksNumber).getDoingList();
         if (tasksAdapter == null)
             tasksAdapter = new Adaptor(tasksList);
         recyclerView.setAdapter(tasksAdapter);

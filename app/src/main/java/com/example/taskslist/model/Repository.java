@@ -16,8 +16,7 @@ public class Repository {
 
     private static void taskInit(String username, int tasksNumber) {
         usertasksList=new ArrayList<>();
-        int tasksListSize=tasksNumber;
-        for (int i = 0; i <tasksListSize; i++) {
+        for (int i = 0; i < tasksNumber; i++) {
             TasksObjects tasksObjects=new TasksObjects();
             tasksObjects.setUsername(username);
             usertasksList.add(tasksObjects);
@@ -33,5 +32,32 @@ public class Repository {
 
     public void setUserTasksList(List<TasksObjects> usertasksList) {
         this.usertasksList = usertasksList;
+    }
+
+    public List<TasksObjects> getTodDoList() {
+        List<TasksObjects> toDoList=new ArrayList<>();
+        for (TasksObjects objects : usertasksList) {
+            if(objects.getState()==States.TODO)
+                toDoList.add(objects);
+        }
+        return toDoList;
+    }
+
+    public List<TasksObjects> getDoingList() {
+        List<TasksObjects> doingList=new ArrayList<>();
+        for (TasksObjects objects : usertasksList) {
+            if(objects.getState()==States.DOING)
+                doingList.add(objects);
+        }
+        return doingList;
+    }
+
+    public List<TasksObjects> getDoneList() {
+        List<TasksObjects> doneList=new ArrayList<>();
+        for (TasksObjects objects : usertasksList) {
+            if(objects.getState()==States.DONE)
+                doneList.add(objects);
+        }
+        return doneList;
     }
 }
