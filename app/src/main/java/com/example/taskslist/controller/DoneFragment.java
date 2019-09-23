@@ -34,7 +34,7 @@ public class DoneFragment extends Fragment {
     private String username;
     private int tasksNumber;
     private RecyclerView recyclerView;
-    private Adaptor tasksAdapter;
+    private Adapter tasksAdapter;
 
 
     public DoneFragment() {
@@ -50,8 +50,8 @@ public class DoneFragment extends Fragment {
      * @return A new instance of fragment ToDoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ToDoFragment newInstance(String username, int tasksNumber) {
-        ToDoFragment fragment = new ToDoFragment();
+    public static DoneFragment newInstance(String username, int tasksNumber) {
+        DoneFragment fragment = new DoneFragment();
         Bundle args = new Bundle();
         args.putString(USERNAME, username);
         args.putInt(TASKSNUMBER, tasksNumber);
@@ -72,7 +72,7 @@ public class DoneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_todo, container, false);
+        return inflater.inflate(R.layout.fragment_done, container, false);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class DoneFragment extends Fragment {
         List<TasksObjects> tasksList =
                 Repository.getInstance(username, tasksNumber).getDoneList();
         if (tasksAdapter == null)
-            tasksAdapter = new Adaptor(tasksList);
+            tasksAdapter = new Adapter(tasksList);
         recyclerView.setAdapter(tasksAdapter);
     }
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.taskslist.model.Repository;
 import com.example.taskslist.model.States;
 
 public class AdsPagerAdapter extends FragmentPagerAdapter {
@@ -23,11 +24,20 @@ public class AdsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                return ToDoFragment.newInstance(username,tasksNumber);
+                if(Repository.getInstance(username,tasksNumber).getTodDoList().size()==0)
+                    return BlankFragment.newInstance();
+                else
+                    return ToDoFragment.newInstance(username,tasksNumber);
             case 1:
-                return DoingFragment.newInstance(username,tasksNumber);
+                if(Repository.getInstance(username,tasksNumber).getDoingList().size()==0)
+                    return BlankFragment.newInstance();
+                else
+                    return DoingFragment.newInstance(username,tasksNumber);
             case 2:
-                return DoneFragment.newInstance(username,tasksNumber);
+                if(Repository.getInstance(username,tasksNumber).getDoneList().size()==0)
+                    return BlankFragment.newInstance();
+                else
+                    return DoneFragment.newInstance(username,tasksNumber);
             default:
                 return null;
         }

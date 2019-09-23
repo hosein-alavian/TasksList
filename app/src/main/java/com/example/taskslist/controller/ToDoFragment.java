@@ -34,7 +34,7 @@ public class ToDoFragment extends Fragment {
     private String username;
     private int tasksNumber;
     private RecyclerView recyclerView;
-    private Adaptor tasksAdapter;
+    private Adapter tasksAdapter;
 
 
     public ToDoFragment() {
@@ -87,7 +87,7 @@ public class ToDoFragment extends Fragment {
         List<TasksObjects> tasksList =
                 Repository.getInstance(username, tasksNumber).getTodDoList();
         if (tasksAdapter == null)
-            tasksAdapter = new Adaptor(tasksList);
+            tasksAdapter = new Adapter(tasksList);
         recyclerView.setAdapter(tasksAdapter);
     }
 

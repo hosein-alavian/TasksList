@@ -15,10 +15,10 @@ import com.example.taskslist.model.TasksObjects;
 
 import java.util.List;
 
-public class Adaptor extends RecyclerView.Adapter<ViewHolder> {
+public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     private List<TasksObjects> objectList;
 
-    public Adaptor(List<TasksObjects> objectList) {
+    public Adapter(List<TasksObjects> objectList) {
         this.objectList = objectList;
     }
 
