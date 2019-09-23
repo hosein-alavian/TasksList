@@ -25,8 +25,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     @SuppressLint("ResourceAsColor")
     public void bind(TasksObjects userTasksList, int position) {
-        if (position % 2 == 0)
-            rowCardView.setBackgroundColor(R.color.design_default_color_primary_dark);
+/*        if (position % 2 == 0)
+            rowCardView.setBackgroundColor(R.color.design_default_color_primary_dark);*/
         usernameRowTV.setText(userTasksList.getUsername());
         stateRowTV.setText(userTasksList.getState().toString());
     }
