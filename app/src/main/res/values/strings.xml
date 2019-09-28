@@ -3,7 +3,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="username">username</string>
+    <string name="title">Title</string>
     <string name="tasks_number">tasks number</string>
     <string name="create">Create</string>
+    <string name="date_picker_title">date of task</string>
+    <string name="add_task_Dialogue_title">Add Task</string>
+    <string name="add_task_Dialogue_Save">save</string>
+    <string name="add_task_Dialogue_Cansel">Cansel</string>
+    <string name="dialouge_title">title</string>
+    <string name="username">UserName</string>
+    <string name="password">Password</string>
 </resources>

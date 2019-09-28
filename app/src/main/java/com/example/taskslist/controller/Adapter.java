@@ -1,25 +1,26 @@
 package com.example.taskslist.controller;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskslist.R;
-import com.example.taskslist.model.TasksObjects;
+import com.example.taskslist.model.Task;
 
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<ViewHolder> {
-    private List<TasksObjects> objectList;
+    private List<Task> tasksList;
 
-    public Adapter(List<TasksObjects> objectList) {
-        this.objectList = objectList;
+    public Adapter(List<Task> objectList) {
+        this.tasksList = objectList;
+    }
+
+    public void setTasksList(List<Task> tasksList) {
+        this.tasksList = tasksList;
     }
 
     @NonNull
@@ -29,18 +30,19 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         View view = activity.getLayoutInflater().inflate(R.layout.view_holder_row,
                 parent,
                 false);
-        return new ViewHolder(view);
+
+        return new ViewHolder(view,activity);
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(objectList.get(position), position);
+        holder.bind(tasksList.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return objectList == null ? 0 : objectList.size();
+        return tasksList == null ? 0 : tasksList.size();
     }
 
 }
