@@ -75,9 +75,8 @@ public class SignUpFragment extends Fragment {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-   /*             Intent intent = new Intent(getActivity(), SgininSignupActivity.class);
-                startActivity(intent);*/
-                getFragmentManager().popBackStack();
+                Intent intent = new Intent(getActivity(), SgininSignupActivity.class);
+                startActivity(intent);
             }
         });
         signUp = view.findViewById(R.id.signup_su_button);

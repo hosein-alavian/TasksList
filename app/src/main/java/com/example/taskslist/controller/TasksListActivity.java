@@ -1,12 +1,17 @@
 package com.example.taskslist.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.taskslist.R;
@@ -27,12 +32,15 @@ public class TasksListActivity extends AppCompatActivity {
     private AdsPagerAdapter mAdsPagerAdapter;
     private FloatingActionButton mFloatingActionButton;
     private DialogueFragment dialogueFragment;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taskslist);
 
+        mToolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         mTabLayout = findViewById(R.id.tasks_tablayout);
         mViewPager = findViewById(R.id.tasks_viewPager);
         updateUI();
@@ -65,6 +73,20 @@ public class TasksListActivity extends AppCompatActivity {
         return intent;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_exit_profile:
+                startActivity(new Intent(getApplicationContext(), SgininSignupActivity.class));
+            }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onPause() {

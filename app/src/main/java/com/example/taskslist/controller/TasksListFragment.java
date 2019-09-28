@@ -2,7 +2,6 @@ package com.example.taskslist.controller;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,30 +18,32 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ToDoFragment#newInstance} factory method to
+ * Use the {@link TasksListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DoingFragment extends Fragment {
+public class TasksListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String TITLE = "com.example.taskslist.model.title";
+    private static final String TITILE = "com.example.taskslist.model.title";
     private static final String TASKSNUMBER = "com.example.taskslist.model.tasksnumber";
+    public static final String TASKS_LIST_TAB = "tasks list tab";
 
 
     // TODO: Rename and change types of parameters
     private RecyclerView mRecyclerView;
     private Adapter mTasksAdapter;
+    int mTasksListTab;
 
 
-    public DoingFragment() {
+    public TasksListFragment() {
         // Required empty public constructor
     }
 
-
     // TODO: Rename and change types and number of parameters
-    public static DoingFragment newInstance() {
-        DoingFragment fragment = new DoingFragment();
+    static TasksListFragment newInstance(int tasksListTab) {
+        TasksListFragment fragment = new TasksListFragment();
         Bundle args = new Bundle();
+        args.putInt(TASKS_LIST_TAB,tasksListTab);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,23 +51,37 @@ public class DoingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments()!=null)
+            mTasksListTab=getArguments().getInt(TASKS_LIST_TAB);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_doing, container, false);
-        mRecyclerView= view.findViewById(R.id.doingtasks_recyclerview);
+        View view = inflater.inflate(R.layout.fragment_taskslist, container, false);
+        mRecyclerView = view.findViewById(R.id.todotasks_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI();
-
         return view;
     }
 
     private void updateUI() {
-        List<Task> tasksList =
-                TaskRepository.getInstance().getDoingList();
+        List<Task> tasksList=null;
+        switch (mTasksListTab){
+            case 0:
+                tasksList =
+                        TaskRepository.getInstance().getTodDoList();
+                break;
+            case 1:
+                tasksList =
+                        TaskRepository.getInstance().getDoingList();
+                break;
+            case 2:
+                tasksList =
+                        TaskRepository.getInstance().getDoneList();
+                break;
+        }
         if (mTasksAdapter == null) {
             mTasksAdapter = new Adapter(tasksList);
             mRecyclerView.setAdapter(mTasksAdapter);
@@ -81,11 +96,5 @@ public class DoingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("state","Doing Frag On Pause");
     }
 }

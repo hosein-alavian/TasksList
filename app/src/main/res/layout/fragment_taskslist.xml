@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.DoneFragment">
+    tools:context=".controller.TasksListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/donetasks_recyclerview"
+        android:id="@+id/todotasks_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/indigo_200" />

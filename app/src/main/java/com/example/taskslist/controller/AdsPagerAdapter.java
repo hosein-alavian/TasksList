@@ -24,19 +24,19 @@ public class AdsPagerAdapter extends FragmentStatePagerAdapter {
                 if(TaskRepository.getInstance().getTodDoList().size()==0)
                     return BlankFragment.newInstance();
                 else
-                    return ToDoFragment.newInstance(position);
+                    return TasksListFragment.newInstance(position);
 
             case 1:
                 if(TaskRepository.getInstance().getDoingList().size()==0)
                     return BlankFragment.newInstance();
                 else
-                    return ToDoFragment.newInstance(position);
+                    return TasksListFragment.newInstance(position);
 
             case 2:
                 if(TaskRepository.getInstance().getDoneList().size()==0)
                     return BlankFragment.newInstance();
                 else
-                    return ToDoFragment.newInstance(position);
+                    return TasksListFragment.newInstance(position);
             default:
                 return null;
         }

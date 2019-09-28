@@ -11,13 +11,13 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="214dp"
-        android:layout_height="106dp"
+        android:layout_width="172dp"
+        android:layout_height="85dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/user_login_page"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView"
         app:layout_constraintEnd_toEndOf="@+id/materialCardView"
-        app:layout_constraintStart_toStartOf="@+id/materialCardView" />
+        app:layout_constraintStart_toStartOf="@+id/materialCardView"
+        app:srcCompat="@mipmap/loginpage_image_foreground" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView2"
@@ -41,9 +41,9 @@
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
-            app:layout_constraintEnd_toEndOf="@+id/username_textView"
-            app:layout_constraintStart_toStartOf="@+id/username_textView"
-            app:layout_constraintTop_toBottomOf="@+id/username_textView" />
+            app:layout_constraintEnd_toEndOf="@+id/username_signin"
+            app:layout_constraintStart_toStartOf="@+id/username_signin"
+            app:layout_constraintTop_toBottomOf="@+id/username_signin" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
