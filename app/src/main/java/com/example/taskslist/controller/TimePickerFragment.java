@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +17,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TimePicker;
 
 import com.example.taskslist.R;
 
@@ -36,7 +35,7 @@ public class TimePickerFragment extends DialogFragment {
 
 
     private static final String ARG_Task_TIME = "com.example.taskslist.taskTime";
-    public static final String EXTRA_TASK_TIME = "com.example.taskslist.extratasktime";
+    static final String EXTRA_TASK_TIME = "com.example.taskslist.extratasktime";
 
     private TimePicker mTimePicker;
     private Date mHour;
@@ -77,6 +76,12 @@ public class TimePickerFragment extends DialogFragment {
                         sendResult();
                     }
                 })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
                 .setView(view)
                 .create();
     }
@@ -86,11 +91,10 @@ public class TimePickerFragment extends DialogFragment {
         int hourOfDay = mTimePicker.getCurrentHour();
         int minutes = mTimePicker.getCurrentMinute();
 
-        Calendar calander=Calendar.getInstance();
-        calander.set(Calendar.HOUR,hourOfDay);
-        calander.set(Calendar.MINUTE,minutes);
-        int AM_PM = getAM_PM(hourOfDay);
-        calander.set(Calendar.AM_PM,hourOfDay);
+        Calendar calander = Calendar.getInstance();
+        calander.set(Calendar.HOUR, hourOfDay);
+        calander.set(Calendar.MINUTE, minutes);
+        calander.set(Calendar.AM_PM, Calendar.AM);
         Date hour = calander.getTime();
 
         Intent intent = new Intent();
@@ -100,22 +104,12 @@ public class TimePickerFragment extends DialogFragment {
         fragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }
 
-    private int getAM_PM(int hourOfDay) {
-        int AM_PM ;
-        if(hourOfDay < 12) {
-            AM_PM = 0;
-        } else {
-            AM_PM = 1;
-        }
-        return AM_PM;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initTimePicker() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mHour);
 
-        int hour= calendar.get(Calendar.HOUR_OF_DAY);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         mTimePicker.setCurrentHour(hour);
         mTimePicker.setCurrentMinute(minute);

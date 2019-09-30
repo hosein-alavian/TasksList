@@ -2,7 +2,7 @@ package com.example.taskslist.model;
 
 import androidx.annotation.Nullable;
 
-public class WrongUserNameException extends Exception{
+public class WrongUserNameException extends Exception {
 
     @Nullable
     @Override

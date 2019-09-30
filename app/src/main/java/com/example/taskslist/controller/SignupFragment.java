@@ -17,14 +17,14 @@ import com.example.taskslist.model.User;
 import com.example.taskslist.model.UserRepository;
 import com.example.taskslist.model.WrongUserNameException;
 
-import static com.example.taskslist.controller.SignInFragment.REQUEST_CODE;
+import static com.example.taskslist.controller.SigninFragment.REQUEST_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SignUpFragment extends Fragment {
-    public static final String USERNAME_TYPED_TO_SIGNUP = "username typed to signup";
-    public static final String PASSWORD_TYPED_TO_SIGNUP = "password typed to signup";
+public class SignupFragment extends Fragment {
+    public static final String USERNAME_TYPED_TO_SIGNUP = "com.example.taskslist.username typed to signup";
+    public static final String PASSWORD_TYPED_TO_SIGNUP = "com.example.taskslist.password typed to signup";
     public static final int RESULT_CODE = 1;
     public static final String USERNAME_VALUE = "username value";
     public static final String PASSWORD_VALUE = "password value";
@@ -35,16 +35,16 @@ public class SignUpFragment extends Fragment {
     private String mUsername;
     private String mPassword;
 
-    public SignUpFragment() {
+    public SignupFragment() {
         // Required empty public constructor
     }
 
-    public static SignUpFragment newInstance(String username,String password) {
+    public static SignupFragment newInstance(String username, String password) {
 
         Bundle args = new Bundle();
-        args.putString(USERNAME_VALUE,username);
-        args.putString(PASSWORD_VALUE,password);
-        SignUpFragment fragment = new SignUpFragment();
+        args.putString(USERNAME_VALUE, username);
+        args.putString(PASSWORD_VALUE, password);
+        SignupFragment fragment = new SignupFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +52,8 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUsername=getArguments().getString(USERNAME_VALUE);
-        mPassword=getArguments().getString(PASSWORD_VALUE);
+        mUsername = getArguments().getString(USERNAME_VALUE);
+        mPassword = getArguments().getString(PASSWORD_VALUE);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class SignUpFragment extends Fragment {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SgininSignupActivity.class);
+                Intent intent = new Intent(getActivity(), SigninSignupActivity.class);
                 startActivity(intent);
             }
         });
@@ -87,11 +87,14 @@ public class SignUpFragment extends Fragment {
                 String passGet = passwordSignUp.getText().toString();
                 try {
                     if (!userNameGet.equals("") && !passGet.equals("")) {
+                        Toast.makeText(getActivity(),
+                                "account created!",
+                                Toast.LENGTH_SHORT).show();
                         UserRepository.getInstance().addUser(new User(userNameGet, passGet));
                         Intent intent = new Intent();
                         intent.putExtra(USERNAME_TYPED_TO_SIGNUP, userNameGet);
                         intent.putExtra(PASSWORD_TYPED_TO_SIGNUP, passGet);
-                        onActivityResult(REQUEST_CODE,RESULT_CODE, intent);
+                        onActivityResult(REQUEST_CODE, RESULT_CODE, intent);
                         assert getFragmentManager() != null;
                         getFragmentManager().popBackStack();
                     } else if (userNameGet.equals("") && passGet.equals(""))

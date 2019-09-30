@@ -8,7 +8,8 @@
     android:layout_marginTop="@dimen/mtrl_card_spacing"
     android:layout_marginRight="@dimen/mtrl_card_spacing"
     android:minHeight="110dp"
-    app:cardBackgroundColor="@color/indigo_100">
+    app:cardBackgroundColor="@color/indigo_200"
+    app:cardCornerRadius="7dp">
 
     <TextView
         android:id="@+id/title_row_textview"
@@ -19,8 +20,9 @@
         android:paddingTop="2dp"
         android:paddingRight="7dp"
         android:paddingBottom="7dp"
-        android:text="TextView"
+        android:text="Task Title"
         android:textAllCaps="true"
+        android:textColor="@color/indigo_900"
         android:textSize="50sp"
         android:textStyle="bold"
         app:fontFamily="serif" />
@@ -31,7 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:padding="6dp"
-        android:text="TextView"
+        android:text="state"
+        android:textColor="@color/indigo_800"
         android:textSize="18sp" />
 
     <TextView
@@ -40,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:padding="6dp"
-        android:text="TextView"
+        android:text="@string/date_picker_title"
+        android:textColor="@color/indigo_800"
         android:textSize="18sp" />
 </com.google.android.material.card.MaterialCardView>

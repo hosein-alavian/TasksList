@@ -1,7 +1,5 @@
 package com.example.taskslist.model;
 
-import java.util.Objects;
-
 public class User {
     private String userName;
     private String password;

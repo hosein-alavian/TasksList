@@ -7,4 +7,9 @@
     <color name="indigo_100">#C5CAE9</color>
     <color name="blue_100">#BBDEFB</color>
     <color name="light_blue_A400">#00B0FF</color>
+    <color name="indigo_A400">#3D5AFE</color>
+    <color name="indigo_A700">#304FFE</color>
+    <color name="indigo_800">#283593</color>
+    <color name="indigo_900">#1A237E</color>
+    <color name="indigo_400">#5C6BC0</color>
 </resources>

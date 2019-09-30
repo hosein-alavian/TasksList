@@ -6,8 +6,8 @@
     tools:context=".controller.TasksListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/todotasks_recyclerview"
+        android:id="@+id/tasksList_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/indigo_200" />
+        android:background="@color/indigo_400" />
 </FrameLayout>

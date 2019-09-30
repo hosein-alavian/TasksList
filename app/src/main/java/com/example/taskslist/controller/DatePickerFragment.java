@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+
 import com.example.taskslist.R;
 
 import java.util.Calendar;
@@ -25,7 +27,7 @@ import java.util.Date;
 public class DatePickerFragment extends DialogFragment {
 
     private static final String ARG_Task_DATE = "com.example.taskslist.taskDate";
-    public static final String EXTRA_TASK_DATE = "com.example.taskslist.controller.extrataskdate";
+    static final String EXTRA_TASK_DATE = "com.example.taskslist.extrataskdate";
 
     private DatePicker mDatePicker;
     private Date mDate;
@@ -83,10 +85,10 @@ public class DatePickerFragment extends DialogFragment {
         int monthOfYear = mDatePicker.getMonth();
         int dayOfMonth = mDatePicker.getDayOfMonth();
 
-        Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.YEAR,year);
-        calendar.set(Calendar.MONTH,monthOfYear);
-        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         Date date = calendar.getTime();
 
         Intent intent = new Intent();

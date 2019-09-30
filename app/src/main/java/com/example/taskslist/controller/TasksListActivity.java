@@ -1,6 +1,5 @@
 package com.example.taskslist.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +54,7 @@ public class TasksListActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void updateUI() {

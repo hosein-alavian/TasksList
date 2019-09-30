@@ -18,31 +18,27 @@ import com.example.taskslist.R;
 import com.example.taskslist.model.UserRepository;
 import com.google.android.material.snackbar.Snackbar;
 
-import static com.example.taskslist.controller.SignUpFragment.PASSWORD_TYPED_TO_SIGNUP;
-import static com.example.taskslist.controller.SignUpFragment.USERNAME_TYPED_TO_SIGNUP;
+import static com.example.taskslist.controller.SignupFragment.PASSWORD_TYPED_TO_SIGNUP;
+import static com.example.taskslist.controller.SignupFragment.USERNAME_TYPED_TO_SIGNUP;
 
 
-public class SignInFragment extends Fragment {
+public class SigninFragment extends Fragment {
 
-    private EditText mTitleTV;
-    private EditText mTasksNumberTV;
-    private Button mCreateTasksButton;
-    public static final String USERNAME_TYPED = "username typed";
-    public static final String PASSWORD_TYPED = "password typed";
+
     public static final int REQUEST_CODE = 0;
     private EditText userName;
     private EditText password;
     private Button signIn;
     private Button signUp;
 
-    public SignInFragment() {
+    public SigninFragment() {
     }
 
-    public static SignInFragment newInstance() {
+    public static SigninFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        SignInFragment fragment = new SignInFragment();
+        SigninFragment fragment = new SigninFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,21 +78,17 @@ public class SignInFragment extends Fragment {
                 String userNameGet = userName.getText().toString();
                 String passGet = password.getText().toString();
                 if (!UserRepository.getInstance().login(userNameGet, passGet)) {
-/*                    Intent intent = new Intent(getActivity(), SignUp.class);
-                    intent.putExtra(USERNAME_TYPED, userNameGet);
-                    intent.putExtra(PASSWORD_TYPED, passGet);
-                    startActivityForResult(intent, REQUEST_CODE);*/
-                    SignUpFragment signUpFragment = SignUpFragment.newInstance(userNameGet, passGet);
-                    signUpFragment.setTargetFragment(SignInFragment.this, REQUEST_CODE);
+                    SignupFragment signUpFragment = SignupFragment.newInstance(userNameGet, passGet);
+                    signUpFragment.setTargetFragment(SigninFragment.this, REQUEST_CODE);
                     assert getFragmentManager() != null;
                     getFragmentManager().beginTransaction()
                             .replace(R.id.main_container_layout, signUpFragment)
-                            .addToBackStack(SignUpFragment.class.getSimpleName())
+                            .addToBackStack(SignupFragment.class.getSimpleName())
                             .commit();
                 } else {
                     assert getFragmentManager() != null;
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.main_container_layout, SignUpFragment.newInstance(userNameGet, passGet))
+                            .replace(R.id.main_container_layout, SignupFragment.newInstance(userNameGet, passGet))
                             .commit();
                 }
             }
@@ -105,7 +97,7 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode != SignUpFragment.RESULT_CODE)
+        if (resultCode != SignupFragment.RESULT_CODE)
             return;
         if (requestCode == REQUEST_CODE)
             if (data == null)

@@ -59,22 +59,6 @@ public class Task {
         return mState;
     }
 
-    public States setState() {
-        Random random=new SecureRandom();
-        int randomNumber=random.nextInt(3);
-        switch (randomNumber){
-            case 0:
-                mState =States.TODO;
-                break;
-            case 1:
-                mState =States.DOING;
-                break;
-            case 2:
-                mState =States.DONE;
-                break;
-        }
-        return mState;
-    }
 
     public void setState(States mState) {
         this.mState = mState;
@@ -84,34 +68,8 @@ public class Task {
         mId=UUID.randomUUID();
         mDate=new Date();
         mHour=new Date();
+        mState=States.TODO;
     }
-
-/*    private Date generateRandomDate() {
-        GregorianCalendar gc = new GregorianCalendar();
-        int year = randBetween(2000, 2019);
-        gc.set(gc.YEAR, year);
-        int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
-        gc.set(gc.DAY_OF_YEAR, dayOfYear);
-
-        return gc.getTime();
-    }
-
-    private int randBetween(int start, int end) {
-        return start + (int)Math.round(Math.random() * (end - start));
-    }*/
-
-/*    private Date generateDate(){
-        GregorianCalendar gc=new GregorianCalendar();
-        Date date=new Date();
-        gc.setTime(date);
-        return gc.getTime();
-}
-    private Date generateHour(){
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.get(gc.HOUR_OF_DAY);
-        gc.get(gc.MINUTE);
-        return gc.getTime();
-    }*/
 
     @SuppressLint("SimpleDateFormat")
     public String getStrHour(){
@@ -120,6 +78,6 @@ public class Task {
 
     @SuppressLint("SimpleDateFormat")
     public String getStrDate(){
-        return new SimpleDateFormat("MMM dd,yyyy").format(getHour());
+        return new SimpleDateFormat("MMM dd,yyyy").format(getmDate());
     }
 }

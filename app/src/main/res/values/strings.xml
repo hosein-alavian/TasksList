@@ -13,4 +13,5 @@
     <string name="dialouge_title">title</string>
     <string name="username">UserName</string>
     <string name="password">Password</string>
+    <string name="edit_task_dialog_title">Edit Task</string>
 </resources>

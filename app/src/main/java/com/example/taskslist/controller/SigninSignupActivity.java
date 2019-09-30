@@ -1,14 +1,14 @@
 package com.example.taskslist.controller;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.taskslist.R;
 
-public class SgininSignupActivity extends AppCompatActivity {
+public class SigninSignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,12 +16,12 @@ public class SgininSignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_container_layout,SignInFragment.newInstance())
+                .replace(R.id.main_container_layout, SigninFragment.newInstance())
                 .commit();
     }
 
     public static Intent newIntent(Context context) {
-        Intent intent=new Intent(context, SgininSignupActivity.class);
+        Intent intent = new Intent(context, SigninSignupActivity.class);
         return intent;
     }
 }
