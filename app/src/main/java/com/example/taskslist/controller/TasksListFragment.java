@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskslist.R;
-import com.example.taskslist.model.TaskRepository;
 import com.example.taskslist.model.Task;
+import com.example.taskslist.model.TaskRepository;
 
 import java.util.List;
 
@@ -24,26 +24,29 @@ import java.util.List;
 public class TasksListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String TITILE = "com.example.taskslist.model.title";
-    private static final String TASKSNUMBER = "com.example.taskslist.model.tasksnumber";
-    public static final String TASKS_LIST_TAB = "tasks list tab";
+    public static final String TASKS_LIST_TAB = "com.example.taskslist.taskslisttab";
 
 
     // TODO: Rename and change types of parameters
     private RecyclerView mRecyclerView;
-    private Adapter mTasksAdapter;
-    int mTasksListTab;
+    private TasksAdapter mTasksAdapter;
+    private int mTasksListTab;
+    private TasksListPagerAdapter mTasksListPagerAdapter;
 
 
     public TasksListFragment() {
         // Required empty public constructor
     }
 
+    public TasksListFragment(TasksListPagerAdapter tasksListPagerAdapter) {
+        mTasksListPagerAdapter = tasksListPagerAdapter;
+    }
+
     // TODO: Rename and change types and number of parameters
-    static TasksListFragment newInstance(int tasksListTab) {
-        TasksListFragment fragment = new TasksListFragment();
+    static TasksListFragment newInstance(int tasksListTab, TasksListPagerAdapter tasksListPagerAdapter) {
+        TasksListFragment fragment = new TasksListFragment(tasksListPagerAdapter);
         Bundle args = new Bundle();
-        args.putInt(TASKS_LIST_TAB,tasksListTab);
+        args.putInt(TASKS_LIST_TAB, tasksListTab);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,8 +54,8 @@ public class TasksListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null)
-            mTasksListTab=getArguments().getInt(TASKS_LIST_TAB);
+        if (getArguments() != null)
+            mTasksListTab = getArguments().getInt(TASKS_LIST_TAB);
     }
 
     @Override
@@ -60,15 +63,15 @@ public class TasksListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_taskslist, container, false);
-        mRecyclerView = view.findViewById(R.id.todotasks_recyclerview);
+        mRecyclerView = view.findViewById(R.id.tasksList_recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI();
         return view;
     }
 
     private void updateUI() {
-        List<Task> tasksList=null;
-        switch (mTasksListTab){
+        List<Task> tasksList = null;
+        switch (mTasksListTab) {
             case 0:
                 tasksList =
                         TaskRepository.getInstance().getTodDoList();
@@ -83,10 +86,9 @@ public class TasksListFragment extends Fragment {
                 break;
         }
         if (mTasksAdapter == null) {
-            mTasksAdapter = new Adapter(tasksList);
+            mTasksAdapter = new TasksAdapter(tasksList, mTasksListPagerAdapter);
             mRecyclerView.setAdapter(mTasksAdapter);
-        }
-        else {
+        } else {
             mTasksAdapter.setTasksList(tasksList);
             mTasksAdapter.notifyDataSetChanged();
         }

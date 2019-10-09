@@ -6,13 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,14 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.example.taskslist.R;
-import com.example.taskslist.model.TaskRepository;
 import com.example.taskslist.model.States;
 import com.example.taskslist.model.Task;
+import com.example.taskslist.model.TaskRepository;
 
 import java.util.Date;
 import java.util.UUID;
@@ -40,34 +38,44 @@ import java.util.UUID;
 public class DialogueFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static final String DATE = "date";
     public static final int REQUEST_CODE_DATE_PICKER = 0;
-    public static final String DATE_PICKER = "DatePicker";
-    public static final String TITLE = "title";
-    public static final String TASKS_NUMBER = "tasks number";
+    public static final String DATE_PICKER = "com.example.taskslist.DatePicker";
     public static final int REQUEST_CODE_TIME_PICKER = 1;
-    public static final String TIME_PICKER = "time picker";
-    public static final String DIALOG_TASK_ID = "dialog task id";
+    public static final String TIME_PICKER = "com.example.taskslist.timepicker";
+    public static final String DIALOG_TASK_ID = "com.example.taskslist.dialogtaskid";
+    public static final String SET_STATE_VIEWS = "set state views";
 
     // TODO: Rename and change types of parameters
     private Task mTask;
-    private Date mDate;
-    private Date mHour;
-    private DatePicker mDatePicker;
     private EditText mDialogueTitleET;
     private EditText mDialogueDescET;
     private Button mDateButton;
     private Button mHourButton;
     private CheckBox mIsDoneCB;
     private static DialogueFragment fragment;
+    private TasksListPagerAdapter mTasksListPagerAdapter;
+    private AlertDialog alertDialog;
+    private LinearLayout dialogLayout;
+    private boolean mSetState=false;
 
 
-    public DialogueFragment() {
+    public DialogueFragment(TasksListPagerAdapter tasksListPagerAdapter) {
+        mTasksListPagerAdapter = tasksListPagerAdapter;
         // Required empty public constructor
     }
 
+    public DialogueFragment() {
+    }
 
     // TODO: Rename and change types and number of parameters
+    public static DialogueFragment newInstance(UUID id, TasksListPagerAdapter tasksListPagerAdapter) {
+        fragment = new DialogueFragment(tasksListPagerAdapter);
+        Bundle args = new Bundle();
+        args.putSerializable(DIALOG_TASK_ID, id);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public static DialogueFragment newInstance(UUID id) {
         fragment = new DialogueFragment();
         Bundle args = new Bundle();
@@ -82,8 +90,10 @@ public class DialogueFragment extends DialogFragment {
         if (getArguments() != null) {
             UUID id = (UUID) getArguments().getSerializable(DIALOG_TASK_ID);
             mTask = TaskRepository.getInstance().getTask(id);
-            mDate = mTask.getmDate();
-            mHour = mTask.getHour();
+        }
+
+        if (savedInstanceState != null) {
+            mSetState = savedInstanceState.getBoolean(SET_STATE_VIEWS);
         }
     }
 
@@ -96,15 +106,28 @@ public class DialogueFragment extends DialogFragment {
 
         initUI(view);
 
-        setLiscener();
+        setListener();
+        if (mTask.getmTitle() != null && mTask.getmDescription() != null && mTask.getmState() != null) {
+            editDialogCreate(view);
+        } else {
+            addDialogCreate(view);
+        }
 
-        return new AlertDialog.Builder(getActivity())
+
+
+        return alertDialog;
+    }
+
+    private void addDialogCreate(View view) {
+        alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.add_task_Dialogue_title)
                 .setPositiveButton(R.string.add_task_Dialogue_Save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         TaskRepository.getInstance().updateTask(mTask);
-//                        Log.d("dialog fragmnet","dialog fragmnet"+String.valueOf(TaskRepository.getInstance().getTasksList().size()));
+                        mTasksListPagerAdapter.notifyDataSetChanged();
+                        Log.d("Dialog fragment", "task list updated " + "todo list size: " + TaskRepository.getInstance().getTodDoList().size()
+                                + " task list size: " + TaskRepository.getInstance().getTasksList().size());
 
                     }
                 })
@@ -117,7 +140,52 @@ public class DialogueFragment extends DialogFragment {
                 .create();
     }
 
-    private void setLiscener() {
+    private void editDialogCreate(View view) {
+        if(!mSetState)
+            setViewsEnabled(mSetState);
+        alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.edit_task_dialog_title))
+                .setNeutralButton("edit", null)
+                .setNegativeButton("delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        TaskRepository.getInstance().deleteTask(mTask);
+                        mTasksListPagerAdapter.notifyDataSetChanged();
+
+                    }
+                })
+                .setPositiveButton(R.string.add_task_Dialogue_Save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        TaskRepository.getInstance().updateTask(mTask);
+                        mTasksListPagerAdapter.notifyDataSetChanged();
+
+
+                    }
+                })
+                .setView(view)
+                .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                button.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        mSetState = true;
+                        setViewsEnabled(mSetState);
+                    }
+                });
+            }
+        });
+    }
+
+    private void setListener() {
         mDialogueTitleET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -155,7 +223,7 @@ public class DialogueFragment extends DialogFragment {
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerFragment dPFragment = DatePickerFragment.newInstance(mDate);
+                DatePickerFragment dPFragment = DatePickerFragment.newInstance(mTask.getmDate());
                 dPFragment.setTargetFragment(fragment, REQUEST_CODE_DATE_PICKER);
                 dPFragment.show(getFragmentManager(), DATE_PICKER);
 
@@ -165,16 +233,16 @@ public class DialogueFragment extends DialogFragment {
         mHourButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerFragment tPFragment = TimePickerFragment.newInstance(mHour);
+                TimePickerFragment tPFragment = TimePickerFragment.newInstance(mTask.getHour());
                 tPFragment.setTargetFragment(fragment, REQUEST_CODE_TIME_PICKER);
                 tPFragment.show(getFragmentManager(), TIME_PICKER);
             }
         });
 
-        mIsDoneCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mIsDoneCB.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b)
+            public void onClick(View view) {
+                if (mIsDoneCB.isChecked())
                     mTask.setState(States.DONE);
                 else
                     mTask.setState(States.TODO);
@@ -183,6 +251,7 @@ public class DialogueFragment extends DialogFragment {
     }
 
     private void initUI(View view) {
+        dialogLayout = view.findViewById(R.id.dialog_layout);
         mDialogueTitleET = view.findViewById(R.id.title_name_editText_dF);
         mDialogueDescET = view.findViewById(R.id.description_editText_dF);
         mDateButton = view.findViewById(R.id.date_button_dF);
@@ -193,7 +262,15 @@ public class DialogueFragment extends DialogFragment {
         mDialogueDescET.setText(mTask.getmDescription());
         mDateButton.setText(mTask.getStrDate());
         mHourButton.setText(mTask.getStrHour());
-        mIsDoneCB.setChecked(mTask.getmState()==States.DONE);
+        mIsDoneCB.setChecked(mTask.getmState() == States.DONE);
+    }
+
+    private void setViewsEnabled(Boolean setState) {
+
+        for (int i = 0; i < dialogLayout.getChildCount(); i++) {
+            View child = dialogLayout.getChildAt(i);
+            child.setEnabled(setState);
+        }
     }
 
     @Override
@@ -204,15 +281,16 @@ public class DialogueFragment extends DialogFragment {
         if (requestCode == REQUEST_CODE_DATE_PICKER) {
             mTask.setmDate((Date) data.getSerializableExtra(DatePickerFragment.EXTRA_TASK_DATE));
             mDateButton.setText(mTask.getStrDate());
-        } else if (requestCode == REQUEST_CODE_TIME_PICKER) {
+        }
+        if (requestCode == REQUEST_CODE_TIME_PICKER) {
             mTask.setHour((Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TASK_TIME));
             mHourButton.setText(mTask.getStrHour());
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("dialogue fragment","dialogue fragment");
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SET_STATE_VIEWS, mSetState);
     }
 }
