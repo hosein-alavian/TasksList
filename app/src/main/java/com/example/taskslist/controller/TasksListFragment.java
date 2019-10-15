@@ -1,11 +1,14 @@
 package com.example.taskslist.controller;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,12 +18,8 @@ import com.example.taskslist.model.Task;
 import com.example.taskslist.model.TaskRepository;
 
 import java.util.List;
+import java.util.UUID;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TasksListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TasksListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,24 +30,35 @@ public class TasksListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private TasksAdapter mTasksAdapter;
     private int mTasksListTab;
-    private TasksListPagerAdapter mTasksListPagerAdapter;
+    private TaskListFragmentCallBack mCallBack;
 
+    public TasksAdapter getTasksAdapter() {
+        return mTasksAdapter;
+    }
 
     public TasksListFragment() {
         // Required empty public constructor
     }
 
-    public TasksListFragment(TasksListPagerAdapter tasksListPagerAdapter) {
-        mTasksListPagerAdapter = tasksListPagerAdapter;
-    }
-
-    // TODO: Rename and change types and number of parameters
-    static TasksListFragment newInstance(int tasksListTab, TasksListPagerAdapter tasksListPagerAdapter) {
-        TasksListFragment fragment = new TasksListFragment(tasksListPagerAdapter);
+    static TasksListFragment newInstance(int tasksListTab) {
+        TasksListFragment fragment = new TasksListFragment();
         Bundle args = new Bundle();
         args.putInt(TASKS_LIST_TAB, tasksListTab);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof TaskListFragmentCallBack)
+            mCallBack= (TaskListFragmentCallBack) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBack=null;
     }
 
     @Override
@@ -69,29 +79,34 @@ public class TasksListFragment extends Fragment {
         return view;
     }
 
-    private void updateUI() {
+    public void updateUI() {
         List<Task> tasksList = null;
         switch (mTasksListTab) {
             case 0:
                 tasksList =
-                        TaskRepository.getInstance().getTodDoList();
+                        TaskRepository.getInstance(getContext()).getToDoList(mCallBack.getUserId());
                 break;
             case 1:
                 tasksList =
-                        TaskRepository.getInstance().getDoingList();
+                        TaskRepository.getInstance(getContext()).getDoingList(mCallBack.getUserId());
                 break;
             case 2:
                 tasksList =
-                        TaskRepository.getInstance().getDoneList();
+                        TaskRepository.getInstance(getContext()).getDoneList(mCallBack.getUserId());
                 break;
         }
         if (mTasksAdapter == null) {
-            mTasksAdapter = new TasksAdapter(tasksList, mTasksListPagerAdapter);
+            mTasksAdapter = new TasksAdapter(tasksList);
             mRecyclerView.setAdapter(mTasksAdapter);
         } else {
+            mTasksAdapter.setTasksListFiltered(tasksList);
             mTasksAdapter.setTasksList(tasksList);
             mTasksAdapter.notifyDataSetChanged();
         }
+    }
+
+    public interface TaskListFragmentCallBack {
+        public UUID getUserId();
     }
 
     @Override
@@ -99,4 +114,5 @@ public class TasksListFragment extends Fragment {
         super.onResume();
         updateUI();
     }
+
 }

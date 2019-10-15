@@ -1,8 +1,19 @@
 package com.example.taskslist.model;
 
+import java.util.UUID;
+
 public class User {
+    private UUID mId;
     private String userName;
     private String password;
+
+    public UUID getId() {
+        return mId;
+    }
+
+    public void setId(UUID id) {
+        mId = id;
+    }
 
     public String getUserName() {
         return userName;
@@ -20,9 +31,10 @@ public class User {
         this.password = password;
     }
 
-    public User(String userName, String password) {
+    public User(String userName, String password,UUID id) {
         this.userName = userName;
         this.password = password;
+        this.mId=id;
     }
 
     @Override

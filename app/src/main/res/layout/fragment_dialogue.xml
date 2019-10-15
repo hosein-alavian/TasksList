@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".controller.DialogueFragment">
+    tools:context=".controller.DialogFragment">
 
     <TextView
         android:id="@+id/title_textView_dF"

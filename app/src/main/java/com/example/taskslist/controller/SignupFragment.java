@@ -17,6 +17,8 @@ import com.example.taskslist.model.User;
 import com.example.taskslist.model.UserRepository;
 import com.example.taskslist.model.WrongUserNameException;
 
+import java.util.UUID;
+
 import static com.example.taskslist.controller.SigninFragment.REQUEST_CODE;
 
 /**
@@ -90,7 +92,7 @@ public class SignupFragment extends Fragment {
                         Toast.makeText(getActivity(),
                                 "account created!",
                                 Toast.LENGTH_SHORT).show();
-                        UserRepository.getInstance().addUser(new User(userNameGet, passGet));
+                        UserRepository.getInstance(getContext()).insertUser(new User(userNameGet, passGet, UUID.randomUUID()));
                         Intent intent = new Intent();
                         intent.putExtra(USERNAME_TYPED_TO_SIGNUP, userNameGet);
                         intent.putExtra(PASSWORD_TYPED_TO_SIGNUP, passGet);

@@ -3,6 +3,7 @@ package com.example.taskslist.controller;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,11 +16,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.example.taskslist.R;
@@ -32,10 +33,10 @@ import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DialogueFragment#newInstance} factory method to
+ * Use the {@link DialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DialogueFragment extends DialogFragment {
+public class DialogFragment extends androidx.fragment.app.DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final int REQUEST_CODE_DATE_PICKER = 0;
@@ -52,32 +53,19 @@ public class DialogueFragment extends DialogFragment {
     private Button mDateButton;
     private Button mHourButton;
     private CheckBox mIsDoneCB;
-    private static DialogueFragment fragment;
-    private TasksListPagerAdapter mTasksListPagerAdapter;
     private AlertDialog alertDialog;
     private LinearLayout dialogLayout;
-    private boolean mSetState=false;
+    private boolean mSetState = false;
+    private DialogFragmentCallBack mCallBack;
 
 
-    public DialogueFragment(TasksListPagerAdapter tasksListPagerAdapter) {
-        mTasksListPagerAdapter = tasksListPagerAdapter;
+    public DialogFragment() {
         // Required empty public constructor
     }
 
-    public DialogueFragment() {
-    }
-
     // TODO: Rename and change types and number of parameters
-    public static DialogueFragment newInstance(UUID id, TasksListPagerAdapter tasksListPagerAdapter) {
-        fragment = new DialogueFragment(tasksListPagerAdapter);
-        Bundle args = new Bundle();
-        args.putSerializable(DIALOG_TASK_ID, id);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static DialogueFragment newInstance(UUID id) {
-        fragment = new DialogueFragment();
+    public static DialogFragment newInstance(UUID id) {
+        DialogFragment fragment = new DialogFragment();
         Bundle args = new Bundle();
         args.putSerializable(DIALOG_TASK_ID, id);
         fragment.setArguments(args);
@@ -85,11 +73,24 @@ public class DialogueFragment extends DialogFragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof DialogFragmentCallBack)
+            mCallBack = (DialogFragmentCallBack) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBack = null;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             UUID id = (UUID) getArguments().getSerializable(DIALOG_TASK_ID);
-            mTask = TaskRepository.getInstance().getTask(id);
+            mTask = TaskRepository.getInstance(getContext()).getTask(id);
         }
 
         if (savedInstanceState != null) {
@@ -114,23 +115,13 @@ public class DialogueFragment extends DialogFragment {
         }
 
 
-
         return alertDialog;
     }
 
     private void addDialogCreate(View view) {
         alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.add_task_Dialogue_title)
-                .setPositiveButton(R.string.add_task_Dialogue_Save, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        TaskRepository.getInstance().updateTask(mTask);
-                        mTasksListPagerAdapter.notifyDataSetChanged();
-                        Log.d("Dialog fragment", "task list updated " + "todo list size: " + TaskRepository.getInstance().getTodDoList().size()
-                                + " task list size: " + TaskRepository.getInstance().getTasksList().size());
-
-                    }
-                })
+                .setPositiveButton(R.string.add_task_Dialogue_Save,null)
                 .setNegativeButton(R.string.add_task_Dialogue_Cansel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -138,10 +129,34 @@ public class DialogueFragment extends DialogFragment {
                 })
                 .setView(view)
                 .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mTask.getmTitle() != null || mTask.getmDescription() != null) {
+                            try {
+                                TaskRepository.getInstance(getContext()).updateTask(mTask);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            mCallBack.updatePagerAdapter();
+                            dismiss();
+                        } else
+                            Toast.makeText(getActivity(),
+                                    getString(R.string.empty_task),
+                                    Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     private void editDialogCreate(View view) {
-        if(!mSetState)
+        if (!mSetState)
             setViewsEnabled(mSetState);
         alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.edit_task_dialog_title))
@@ -149,18 +164,23 @@ public class DialogueFragment extends DialogFragment {
                 .setNegativeButton("delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        TaskRepository.getInstance().deleteTask(mTask);
-                        mTasksListPagerAdapter.notifyDataSetChanged();
-
+                        try {
+                            TaskRepository.getInstance(getContext()).deleteTask(mTask);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mCallBack.updatePagerAdapter();
                     }
                 })
                 .setPositiveButton(R.string.add_task_Dialogue_Save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        TaskRepository.getInstance().updateTask(mTask);
-                        mTasksListPagerAdapter.notifyDataSetChanged();
-
-
+                        try {
+                            TaskRepository.getInstance(getContext()).updateTask(mTask);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mCallBack.updatePagerAdapter();
                     }
                 })
                 .setView(view)
@@ -224,7 +244,7 @@ public class DialogueFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 DatePickerFragment dPFragment = DatePickerFragment.newInstance(mTask.getmDate());
-                dPFragment.setTargetFragment(fragment, REQUEST_CODE_DATE_PICKER);
+                dPFragment.setTargetFragment(DialogFragment.this, REQUEST_CODE_DATE_PICKER);
                 dPFragment.show(getFragmentManager(), DATE_PICKER);
 
             }
@@ -234,7 +254,7 @@ public class DialogueFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 TimePickerFragment tPFragment = TimePickerFragment.newInstance(mTask.getHour());
-                tPFragment.setTargetFragment(fragment, REQUEST_CODE_TIME_PICKER);
+                tPFragment.setTargetFragment(DialogFragment.this, REQUEST_CODE_TIME_PICKER);
                 tPFragment.show(getFragmentManager(), TIME_PICKER);
             }
         });
@@ -292,5 +312,21 @@ public class DialogueFragment extends DialogFragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SET_STATE_VIEWS, mSetState);
+    }
+
+    public interface DialogFragmentCallBack {
+        public void updatePagerAdapter();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mTask.getmTitle()==null && mTask.getmDescription()==null) {
+            try {
+                TaskRepository.getInstance(getContext()).deleteTask(mTask);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

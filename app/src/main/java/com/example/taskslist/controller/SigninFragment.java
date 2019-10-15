@@ -15,8 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.taskslist.R;
+import com.example.taskslist.model.User;
 import com.example.taskslist.model.UserRepository;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.UUID;
 
 import static com.example.taskslist.controller.SignupFragment.PASSWORD_TYPED_TO_SIGNUP;
 import static com.example.taskslist.controller.SignupFragment.USERNAME_TYPED_TO_SIGNUP;
@@ -43,6 +46,7 @@ public class SigninFragment extends Fragment {
         return fragment;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,11 +66,13 @@ public class SigninFragment extends Fragment {
             public void onClick(View view) {
                 String userNameGet = userName.getText().toString();
                 String passGet = password.getText().toString();
-                if (!UserRepository.getInstance().login(userNameGet, passGet))
-                    Toast.makeText(getActivity(), "username or password is wrong!", Toast.LENGTH_LONG).show();
+
+                if (!UserRepository.getInstance(getContext()).login(userNameGet, passGet))
+                    Toast.makeText(getActivity(), "username or password is wrong!", Toast.LENGTH_SHORT).show();
                 else {
-                    Snackbar.make(view, "Welcome " + userNameGet, Snackbar.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), TasksListActivity.class);
+                    Toast.makeText(getActivity(), "Welcome " + userNameGet, Toast.LENGTH_SHORT).show();
+                    Intent intent =TasksListActivity.newIntent(getContext(),userNameGet,passGet);
+
                     startActivity(intent);
                 }
             }
@@ -77,7 +83,7 @@ public class SigninFragment extends Fragment {
             public void onClick(View view) {
                 String userNameGet = userName.getText().toString();
                 String passGet = password.getText().toString();
-                if (!UserRepository.getInstance().login(userNameGet, passGet)) {
+                if (!UserRepository.getInstance(getContext()).login(userNameGet, passGet)) {
                     SignupFragment signUpFragment = SignupFragment.newInstance(userNameGet, passGet);
                     signUpFragment.setTargetFragment(SigninFragment.this, REQUEST_CODE);
                     assert getFragmentManager() != null;

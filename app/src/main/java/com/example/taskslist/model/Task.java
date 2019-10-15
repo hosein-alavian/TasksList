@@ -1,14 +1,9 @@
 package com.example.taskslist.model;
 
 import android.annotation.SuppressLint;
-import android.icu.util.Calendar;
 
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 public class Task {
@@ -18,6 +13,7 @@ public class Task {
     private Date mDate;
     private Date mHour;
     private States mState;
+    private UUID mUserId;
 
     public UUID getId() {
         return mId;
@@ -64,11 +60,21 @@ public class Task {
         this.mState = mState;
     }
 
-    public Task() {
-        mId=UUID.randomUUID();
+    public void setUserId(UUID userId) {
+        mUserId = userId;
+    }
+
+    public UUID getUserId() {
+        return mUserId;
+    }
+
+    public Task(UUID id,UUID userId) {
+        mId=id;
         mDate=new Date();
         mHour=new Date();
         mState=States.TODO;
+        mUserId =userId;
+
     }
 
     @SuppressLint("SimpleDateFormat")
