@@ -72,7 +72,7 @@ public class Task {
         mId=id;
         mDate=new Date();
         mHour=new Date();
-        mState=States.TODO;
+        mState=null;
         mUserId =userId;
 
     }

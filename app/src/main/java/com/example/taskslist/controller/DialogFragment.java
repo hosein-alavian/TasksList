@@ -57,10 +57,14 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
     private LinearLayout dialogLayout;
     private boolean mSetState = false;
     private DialogFragmentCallBack mCallBack;
+    private UUID mSavedTaskId;
+    private Boolean mAddTaskSavePressed;
 
 
     public DialogFragment() {
         // Required empty public constructor
+        mAddTaskSavePressed=false;
+
     }
 
     // TODO: Rename and change types and number of parameters
@@ -108,7 +112,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
         initUI(view);
 
         setListener();
-        if (mTask.getmTitle() != null && mTask.getmDescription() != null && mTask.getmState() != null) {
+        if (mTask.getmState()!= null) {
             editDialogCreate(view);
         } else {
             addDialogCreate(view);
@@ -119,10 +123,24 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
     }
 
     private void addDialogCreate(View view) {
-        alertDialog = new AlertDialog.Builder(getActivity())
+        mSavedTaskId = mTask.getId();
+        mTask.setState(States.TODO);
+        alertDialog = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.add_task_Dialogue_title)
-                .setPositiveButton(R.string.add_task_Dialogue_Save,null)
-                .setNegativeButton(R.string.add_task_Dialogue_Cansel, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.add_task_Dialogue_Save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            TaskRepository.getInstance(getContext()).updateTask(mTask);
+                            mAddTaskSavePressed = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mCallBack.updatePagerAdapter();
+                    }
+                })
+                .setNegativeButton(R.string.add_task_Dialogue_Cansel,
+                        new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
@@ -130,20 +148,14 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                 .setView(view)
                 .create();
 
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        /*alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (mTask.getmTitle() != null || mTask.getmDescription() != null) {
-                            try {
-                                TaskRepository.getInstance(getContext()).updateTask(mTask);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            mCallBack.updatePagerAdapter();
+
                             dismiss();
                         } else
                             Toast.makeText(getActivity(),
@@ -152,13 +164,13 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                     }
                 });
             }
-        });
+        });*/
     }
 
     private void editDialogCreate(View view) {
         if (!mSetState)
             setViewsEnabled(mSetState);
-        alertDialog = new AlertDialog.Builder(getActivity())
+        alertDialog = new AlertDialog.Builder(getContext())
                 .setTitle(getString(R.string.edit_task_dialog_title))
                 .setNeutralButton("edit", null)
                 .setNegativeButton("delete", new DialogInterface.OnClickListener() {
@@ -321,7 +333,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(mTask.getmTitle()==null && mTask.getmDescription()==null) {
+        if(mTask.getId()==mSavedTaskId && !mAddTaskSavePressed) {
             try {
                 TaskRepository.getInstance(getContext()).deleteTask(mTask);
             } catch (Exception e) {

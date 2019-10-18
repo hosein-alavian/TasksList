@@ -133,7 +133,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
         @SuppressLint({"ResourceAsColor", "SetTextI18n"})
         public void bind(Task task) {
-            if (task.getmTitle() != null) {
+            if (task.getmTitle() != null && task.getmTitle().length()!=0) {
                 mTitleRowTV.setText(task.getmTitle().substring(0, 1));
             }
             mStateRowTV.setText(task.getmState().toString());

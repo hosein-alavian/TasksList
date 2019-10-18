@@ -20,7 +20,8 @@ public class TaskCursorWrapper extends CursorWrapper {
         String description = getString(getColumnIndex(TaskDBSchema.Task.Cols.DESCRIPTION));
         long date = getLong(getColumnIndex(TaskDBSchema.Task.Cols.DATE));
         long hour = getLong(getColumnIndex(TaskDBSchema.Task.Cols.HOUR));
-        States state = States.valueOf(getString(getColumnIndex(TaskDBSchema.Task.Cols.STATE)));
+        States state = getString(getColumnIndex(TaskDBSchema.Task.Cols.STATE))==null?null:
+                States.valueOf(getString(getColumnIndex(TaskDBSchema.Task.Cols.STATE)));
         UUID userid = UUID.fromString(getString(getColumnIndex(TaskDBSchema.Task.Cols.USERID)));
 
         Task task = new Task(id,userid);

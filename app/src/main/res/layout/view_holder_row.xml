@@ -20,7 +20,6 @@
         android:paddingTop="2dp"
         android:paddingRight="7dp"
         android:paddingBottom="7dp"
-        android:text="Task Title"
         android:textAllCaps="true"
         android:textColor="@color/indigo_900"
         android:textSize="50sp"

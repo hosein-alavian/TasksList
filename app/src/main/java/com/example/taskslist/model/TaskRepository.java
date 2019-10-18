@@ -53,7 +53,7 @@ public class TaskRepository {
         values.put(Cols.DESCRIPTION, task.getmDescription());
         values.put(Cols.DATE, task.getmDate().getTime());
         values.put(Cols.HOUR, task.getHour().getTime());
-        values.put(Cols.STATE, task.getmState().toString());
+        values.put(Cols.STATE, task.getmState()==null?null:task.getmState().toString());
         values.put(Cols.USERID, task.getUserId().toString());
 
         return values;
