@@ -16,4 +16,12 @@
     <string name="edit_task_dialog_title">Edit Task</string>
     <string name="task_not_exist">this task does not exist</string>
     <string name="empty_task">task title or description is empty!</string>
+    <string name="user_registered">user has been registered!</string>
+    <string name="exit_menu_item">Exit</string>
+    <string name="edit_task_Dialogue_Delete">delete</string>
+    <string name="edit_task_Dialogue_Edit">edit</string>
+    <string name="delete_sure_qustion">Are you sure to delete?</string>
+    <string name="task_number">%d task</string>
+    <string name="sure_remove_dialog">ok</string>
+    <string name="share_task">Title: %1$s, Descripton: %2$s, Date: %3$s, Hour: %4$s, state: %5$s</string>
 </resources>

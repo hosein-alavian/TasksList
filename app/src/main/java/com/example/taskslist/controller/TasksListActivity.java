@@ -32,7 +32,7 @@ public class TasksListActivity extends AppCompatActivity implements DialogFragme
     private TasksListViewPagerFragment mTasksListViewPagerFragment;
     private String mUsername;
     private String mPassword;
-    private UUID mUserId;
+    private long mUserId;
     private TasksListFragment mTasksListFragment;
 
     public static Intent newIntent(Context context, String username, String password) {
@@ -52,7 +52,7 @@ public class TasksListActivity extends AppCompatActivity implements DialogFragme
             User user = UserRepository.getInstance(getApplicationContext()).getUser(
                     mUsername,
                     mPassword);
-            mUserId = user.getId();
+            mUserId = user.get_id();
         }
         mFloatingActionButton = findViewById(R.id.floating_button);
         createUI();
@@ -62,14 +62,17 @@ public class TasksListActivity extends AppCompatActivity implements DialogFragme
     private void createUI() {
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.taskslist_container_layout, TasksListViewPagerFragment.newInstance())
-                .addToBackStack(TasksListViewPagerFragment.class.getSimpleName())
+                .replace(R.id.taskslist_container_layout,
+                        TasksListViewPagerFragment.newInstance())
                 .commit();
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Task task = new Task(UUID.randomUUID(), mUserId);
+                Task task = new Task(UUID.randomUUID());
+                task.setUser(UserRepository.getInstance(getApplicationContext()).getUser(mUsername, mPassword));
+                Log.d("user id", "new task user id " + task.getUserid());
+                Log.d("user name", "new task username " + task.getUser().getMUserName());
                 TaskRepository.getInstance(getApplicationContext()).insertTask(task);
 //                Log.d("task list size","size: "+TaskRepository.getInstance().getTasksList().size());
                 dialogueFragment = DialogFragment.newInstance(task.getId());
@@ -125,7 +128,9 @@ public class TasksListActivity extends AppCompatActivity implements DialogFragme
     }
 
     @Override
-    public UUID getUserId() {
+    public long getUserId() {
         return mUserId;
     }
+
+
 }

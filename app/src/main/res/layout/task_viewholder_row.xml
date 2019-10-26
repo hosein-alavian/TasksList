@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/row_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/mtrl_card_spacing"
+    android:layout_marginTop="@dimen/mtrl_card_spacing"
+    android:layout_marginRight="@dimen/mtrl_card_spacing"
+    android:minHeight="110dp"
+    app:cardBackgroundColor="@color/indigo_200"
+    app:cardCornerRadius="7dp">
+
+    <TextView
+        android:id="@+id/title_row_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:paddingLeft="7dp"
+        android:paddingTop="2dp"
+        android:paddingRight="7dp"
+        android:paddingBottom="7dp"
+        android:textAllCaps="true"
+        android:textColor="@color/indigo_900"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:fontFamily="serif" />
+
+    <TextView
+        android:id="@+id/state_row_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="8dp"
+        android:text="state"
+        android:textColor="@color/indigo_800"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/date_row_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="8dp"
+        android:text="@string/date_picker_title"
+        android:textColor="@color/indigo_800"
+        android:textSize="18sp" />
+</com.google.android.material.card.MaterialCardView>

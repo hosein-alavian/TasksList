@@ -3,7 +3,6 @@ package com.example.taskslist.controller;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.example.taskslist.model.Task;
 import com.example.taskslist.model.TaskRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 public class TasksListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -51,14 +49,14 @@ public class TasksListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof TaskListFragmentCallBack)
-            mCallBack= (TaskListFragmentCallBack) context;
+        if (context instanceof TaskListFragmentCallBack)
+            mCallBack = (TaskListFragmentCallBack) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallBack=null;
+        mCallBack = null;
     }
 
     @Override
@@ -106,7 +104,7 @@ public class TasksListFragment extends Fragment {
     }
 
     public interface TaskListFragmentCallBack {
-        public UUID getUserId();
+        public long getUserId();
     }
 
     @Override

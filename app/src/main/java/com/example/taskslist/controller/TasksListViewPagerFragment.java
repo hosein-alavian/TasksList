@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,9 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.taskslist.R;
+import com.example.taskslist.model.Role;
+import com.example.taskslist.model.User;
+import com.example.taskslist.model.UserRepository;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.UUID;
@@ -42,8 +46,8 @@ public class TasksListViewPagerFragment extends Fragment {
         return mTasksListPagerAdapter;
     }
 
-    public int getTabPosition(){
-       return mTabLayout.getSelectedTabPosition();
+    public int getTabPosition() {
+        return mTabLayout.getSelectedTabPosition();
     }
 
 
@@ -105,7 +109,7 @@ public class TasksListViewPagerFragment extends Fragment {
 
     public void updateUI() {
         if (mTasksListPagerAdapter == null) {
-            mTasksListPagerAdapter = new TasksListPagerAdapter(getFragmentManager(),mCallBack.getUserId(),getContext());
+            mTasksListPagerAdapter = new TasksListPagerAdapter(getFragmentManager(), mCallBack.getUserId(), getContext());
             mViewPager.setAdapter(mTasksListPagerAdapter);
         } else
             mTasksListPagerAdapter.notifyDataSetChanged();
@@ -115,6 +119,13 @@ public class TasksListViewPagerFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu, menu);
+
+        User user = UserRepository.getInstance(getContext())
+                .getUser(mCallBack.getUserId());
+        menu.findItem(R.id.menu_user_name).setTitle("username: "+user.getUserName());
+
+        if(user.getRole()== Role.ADMIN)
+            menu.findItem(R.id.menu_user_list).setVisible(true);
 
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         if (searchView != null) {
@@ -155,6 +166,12 @@ public class TasksListViewPagerFragment extends Fragment {
                 return true;
             case R.id.action_search:
                 return true;
+            case R.id.menu_user_list:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.taskslist_container_layout,UserListFragment.newInstance())
+                        .commit();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -167,14 +184,15 @@ public class TasksListViewPagerFragment extends Fragment {
     }*/
 
     public interface TaskListViewPagerFragmentCallBack {
-        public TasksAdapter gettaskAdapter() throws Exception;
-        public UUID getUserId();
+        TasksAdapter gettaskAdapter() throws Exception;
+
+        long getUserId();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+//        updateUI();
     }
 }
 

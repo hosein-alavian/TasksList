@@ -1,3 +1,4 @@
+/*
 package com.example.taskslist.model.database;
 
 import android.content.Context;
@@ -34,3 +35,4 @@ public class TaskOpenHelper extends SQLiteOpenHelper {
 
     }
 }
+*/

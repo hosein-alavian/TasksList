@@ -17,9 +17,22 @@
         android:orderInCategory="2">
         <menu>
             <item
+                android:title="@string/username"
+                android:id="@+id/menu_user_name"
+                android:icon="@drawable/user_menu_image"
+                android:orderInCategory="1"
+                />
+            <item
+                android:title="users list"
+                android:id="@+id/menu_user_list"
+                android:icon="@drawable/userlist_menu_image"
+                android:visible="false"
+                android:orderInCategory="2"/>
+            <item
                 android:id="@+id/menu_exit_profile"
                 android:icon="@drawable/exit_menu_image"
-                android:title="Exit" />
+                android:title="@string/exit_menu_item"
+                android:orderInCategory="3"/>
 
         </menu>
     </item>

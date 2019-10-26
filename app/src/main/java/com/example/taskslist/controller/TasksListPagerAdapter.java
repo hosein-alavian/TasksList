@@ -20,7 +20,7 @@ public class TasksListPagerAdapter extends FragmentStatePagerAdapter {
     private TasksListFragment mToDoFragment;
     private TasksListFragment mDoingFragment;
     private TasksListFragment mDoneFragment;
-    private final UUID mId;
+    private final long mId;
     private final Context mContext;
 
     public TasksListFragment getToDoFragment() {
@@ -39,7 +39,7 @@ public class TasksListPagerAdapter extends FragmentStatePagerAdapter {
         return mTag;
     }
 
-    public TasksListPagerAdapter(@NonNull FragmentManager fm, UUID id, Context context) {
+    public TasksListPagerAdapter(@NonNull FragmentManager fm, long id, Context context) {
         super(fm);
         mId = id;
         mContext = context;

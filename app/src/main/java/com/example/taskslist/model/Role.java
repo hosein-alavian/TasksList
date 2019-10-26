@@ -1,14 +1,13 @@
 package com.example.taskslist.model;
 
-public enum States {
-    TODO(0),
-    DOING(1),
-    DONE(2);
+public enum Role {
+    NORMAL(0),
+    ADMIN(1);
 
 
-private int i;
+    private int i;
 
-    States(int i) {
+    Role(int i) {
         this.i = i;
     }
 
@@ -16,4 +15,3 @@ private int i;
         return i;
     }
 }
-

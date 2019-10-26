@@ -93,6 +93,7 @@ public class SignupFragment extends Fragment {
                                 "account created!",
                                 Toast.LENGTH_SHORT).show();
                         UserRepository.getInstance(getContext()).insertUser(new User(userNameGet, passGet, UUID.randomUUID()));
+
                         Intent intent = new Intent();
                         intent.putExtra(USERNAME_TYPED_TO_SIGNUP, userNameGet);
                         intent.putExtra(PASSWORD_TYPED_TO_SIGNUP, passGet);
@@ -114,8 +115,10 @@ public class SignupFragment extends Fragment {
 
                 } catch (WrongUserNameException e) {
                     e.printStackTrace();
-                    Toast.makeText(getActivity(), e.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),
+                            getString(R.string.user_registered),
+                            Toast.LENGTH_SHORT).show();
+
                 }
             }
         });

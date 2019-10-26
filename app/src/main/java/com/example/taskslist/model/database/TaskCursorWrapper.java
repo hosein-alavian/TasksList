@@ -1,3 +1,4 @@
+/*
 package com.example.taskslist.model.database;
 
 import android.database.Cursor;
@@ -22,7 +23,7 @@ public class TaskCursorWrapper extends CursorWrapper {
         long hour = getLong(getColumnIndex(TaskDBSchema.Task.Cols.HOUR));
         States state = getString(getColumnIndex(TaskDBSchema.Task.Cols.STATE))==null?null:
                 States.valueOf(getString(getColumnIndex(TaskDBSchema.Task.Cols.STATE)));
-        UUID userid = UUID.fromString(getString(getColumnIndex(TaskDBSchema.Task.Cols.USERID)));
+        long userid = getLong(getColumnIndex(TaskDBSchema.Task.Cols.USERID));
 
         Task task = new Task(id,userid);
         task.setmTitle(title);
@@ -34,3 +35,4 @@ public class TaskCursorWrapper extends CursorWrapper {
         return task;
     }
 }
+*/

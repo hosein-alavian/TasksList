@@ -1,3 +1,4 @@
+/*
 package com.example.taskslist.model.database;
 
 public class UserDBSchema {
@@ -14,3 +15,4 @@ public class UserDBSchema {
         }
     }
 }
+*/

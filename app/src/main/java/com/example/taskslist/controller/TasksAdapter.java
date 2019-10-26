@@ -43,7 +43,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     @Override
     public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mActivity = (Activity) parent.getContext();
-        View view = mActivity.getLayoutInflater().inflate(R.layout.view_holder_row,
+        View view = mActivity.getLayoutInflater().inflate(R.layout.task_viewholder_row,
                 parent,
                 false);
 
@@ -64,7 +64,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
     @Override
     public long getItemId(int position) {
-        return Long.parseLong(mTasksListFiltered.get(position).getId().toString());
+        return mTasksListFiltered.get(position).get_id();
     }
 
     @Override
